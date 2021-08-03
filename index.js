@@ -1,8 +1,6 @@
 const toyCollection = document.getElementById(`toy-collection`)
 const toyForm = document.querySelector(`.add-toy-form`)
 
-document.textContent = `hello!`
-
 function init(){
     getToys()
     toyForm.addEventListener(`submit`,postToy)
@@ -38,7 +36,7 @@ function renderCard(resp){
     const likeButton = document.createElement(`button`)
     likeButton.textContent = `Like`
     likeButton.className = `like-btn`
-    likeButton.id = `toy_id${resp.id}`
+    likeButton.id = `toy_id`
     likeButton.addEventListener(`click`,function(){patchLike(resp)})
 
     toyCard.append(toyImage,toyName,toyLikesDisplay,likeButton)
@@ -64,8 +62,6 @@ function postToy(e){
     .then(renderCard)
 }
 
-
-
 function patchLike(resp){
     const likeCounter = document.getElementById(`likes${resp.id}`)
     const likeNumber = ++resp.likes
@@ -73,10 +69,12 @@ function patchLike(resp){
     fetch(`http://localhost:3000/toys/${resp.id}`,{
         method:"PATCH",
         headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({likes: likeNumber})
+        body: JSON.stringify({
+            likes: likeNumber
+        })
     })
 
     .then(resp => resp.json())
-    .then(function(resp){likeCounter.textContent = resp.likes})
+    .then(likeCounter.textContent = resp.likes)
 
 }
